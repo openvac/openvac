@@ -1,0 +1,6 @@
+.DS_Store
+.next
+.pnp
+build
+node_modules
+out

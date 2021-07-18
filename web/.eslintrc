@@ -1,0 +1,28 @@
+{
+  "env": {
+    "commonjs": true,
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": ["next", "plugin:prettier/recommended"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "react/prefer-stateless-function": 0,
+    "linebreak-style": 0,
+    "jsx-a11y/heading-has-content": 0,
+    "jsx-a11y/href-no-hash": 0,
+    "jsx-a11y/anchor-is-valid": 0,
+    "no-underscore-dangle": 0,
+    "react/no-find-dom-node": 0,
+    "react/prop-types": 0,
+    "react/react-in-jsx-scope": "off",
+    "no-nested-ternary": 0,
+    "react/no-unescaped-entities": 0,
+    "react/display-name": "off",
+    "@next/next/no-img-element": "off"
+  },
+  "globals": {
+    "grecaptcha": "readonly"
+  }
+}

@@ -11,4 +11,4 @@ config :openvac, OpenVacWeb.Endpoint,
 config :openvac,
   ecto_repos: [OpenVac.Repo]
 
-config :openvac, OpenVac.Repo, url: "postgres://0.0.0.0:5432/openvac?sslmode=disable"
+config :openvac, OpenVac.Repo, url: "ecto://0.0.0.0:5432/openvac?sslmode=disable"

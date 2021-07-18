@@ -4,5 +4,5 @@ defmodule OpenVacWeb.Router do
   use Phoenix.Router, namespace: OpenVacWeb
   use Plug.ErrorHandler
 
-  get("/", OpenVacWeb.HomeController, :index)
+  get "/", OpenVacWeb.HomeController, :index
 end

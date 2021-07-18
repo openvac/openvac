@@ -146,6 +146,7 @@ jobs:
   #       run: mix dialyzer --no-check --format short
 
   dockerize:
+    needs: test
     name: Dockerize
     runs-on: ubuntu-latest
     steps:
@@ -157,7 +158,7 @@ jobs:
         run: echo ::set-output name=image_tag::${REGISTRY}/${APP_NAME}:$(git rev-parse --short HEAD)
 
       - name: Build
-        run: docker build --tag ${{ steps.vars.outputs.image_tag }} --target release ${{ format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/Dockerfile') }}
+        run: docker build --tag ${{ steps.vars.outputs.image_tag }} ${{ format('{0}/{1}', github.workspace, env.APP_PATH) }}
 
       - name: Push
         run: docker push ${{ steps.vars.outputs.image_tag }}

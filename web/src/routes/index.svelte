@@ -4,6 +4,21 @@
 
 <script lang="ts">
   import Counter from '$lib/Counter.svelte';
+  import { tw, setup } from "twind"
+
+  setup({
+    theme: {
+      fontFamily: {
+        sans: ['Helvetica', 'sans-serif'],
+        serif: ['Times', 'serif'],
+      },
+      extend: {
+        fontSize: {
+          '7xl': '10rem',
+        }
+      },
+    },
+  })
 </script>
 
 <svelte:head>
@@ -11,15 +26,17 @@
 </svelte:head>
 
 <section>
-  <h1>
-    <div class="welcome">
+  <h1 class={tw`text-7xl text-red-500 mb-4`}>
+    <!-- <div class="welcome">
       <picture>
         <source srcset="svelte-welcome.webp" type="image/webp" />
         <img src="svelte-welcome.png" alt="Welcome" />
       </picture>
     </div>
 
-    to your new<br />SvelteKit app
+    to your new<br />SvelteKit app -->
+
+    OpenVac
   </h1>
 
   <h2>
@@ -42,7 +59,7 @@
     width: 100%;
   }
 
-  .welcome {
+  /* .welcome {
     position: relative;
     width: 100%;
     height: 0;
@@ -55,5 +72,5 @@
     height: 100%;
     top: 0;
     display: block;
-  }
+  } */
 </style>

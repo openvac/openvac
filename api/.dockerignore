@@ -1,0 +1,14 @@
+.dockerignore
+.elixir_ls/
+.env
+.formatter.exs
+.git/
+.gitignore
+.travis.yml
+.vscode/
+_build/
+deps/
+Dockerfile
+priv/static/
+README.md
+test/

@@ -1,8 +1,8 @@
-defmodule OpenvacTest do
+defmodule OpenVacTest do
   use ExUnit.Case
-  doctest Openvac
+  doctest OpenVac
 
   test "greets the world" do
-    assert Openvac.hello() == :world
+    assert OpenVac.hello() == :world
   end
 end

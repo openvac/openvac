@@ -1,4 +1,4 @@
-defmodule Openvac do
+defmodule OpenVac do
   @moduledoc """
   Documentation for `Openvac`.
   """
@@ -8,7 +8,7 @@ defmodule Openvac do
 
   ## Examples
 
-      iex> Openvac.hello()
+      iex> OpenVac.hello()
       :world
 
   """

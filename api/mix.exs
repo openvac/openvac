@@ -1,4 +1,4 @@
-defmodule Openvac.MixProject do
+defmodule OpenVac.MixProject do
   use Mix.Project
 
   def project do
@@ -14,7 +14,7 @@ defmodule Openvac.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {Openvac.Application, []}
+      mod: {OpenVac.Application, []}
     ]
   end
 

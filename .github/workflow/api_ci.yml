@@ -1,0 +1,179 @@
+name: API CI
+
+on:
+  pull_request:
+    paths:
+      - "api/**"
+  push:
+    paths:
+      - "api/**"
+    branches:
+      - main
+
+env:
+  OTP_VERSION: "24.0.3"
+  ELIXIR_VERSION: "1.12.2"
+  REGISTRY: "ghcr.io/openvac"
+  APP_NAME: "openvac_api"
+  APP_PATH: "api"
+
+defaults:
+  run:
+    working-directory: "api"
+
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  # lint:
+  #   name: Lint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Setup Elixir
+  #       uses: erlef/setup-beam@v1
+  #       with:
+  #         elixir-version: ${{ env.ELIXIR_VERSION }}
+  #         otp-version: ${{ env.OTP_VERSION }}
+
+  #     - name: Cache deps
+  #       uses: actions/cache@v2
+  #       id: mix-cache
+  #       with:
+  #         path: ${{ format('{0}{1}', env.APP_PATH, '/deps') }}
+  #         key: ${{ runner.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ env.APP_NAME }}-mix-${{ hashFiles(format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/mix.lock')) }}
+
+  #     - name: Install Dependencies
+  #       if: steps.mix-cache.outputs.cache-hit != 'true'
+  #       run: |
+  #         mix local.rebar --force
+  #         mix local.hex --force
+  #         mix deps.get
+
+  #     - name: Check formatted
+  #       run: mix format --check-formatted
+
+  #     - name: Check quality
+  #       run: mix credo
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgres:13-alpine
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: openvac_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+
+      - name: Cache deps
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: ${{ format('{0}{1}', env.APP_PATH, '/deps') }}
+          key: ${{ runner.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ env.APP_NAME }}-mix-${{ hashFiles(format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/mix.lock')) }}
+
+      - name: Install Dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
+
+      - name: Test
+        run: mix test
+        env:
+          MIX_ENV: test
+
+  # spec_check:
+  #   name: Optimistic type checking
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Setup Elixir
+  #       uses: erlef/setup-beam@v1
+  #       with:
+  #         elixir-version: ${{ env.ELIXIR_VERSION }}
+  #         otp-version: ${{ env.OTP_VERSION }}
+
+  #     - name: Cache deps
+  #       uses: actions/cache@v2
+  #       id: mix-cache
+  #       with:
+  #         path: ${{ format('{0}{1}', env.APP_PATH, '/deps') }}
+  #         key: ${{ runner.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ env.APP_NAME }}-mix-${{ hashFiles(format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/mix.lock')) }}
+
+  #     - name: Install Dependencies
+  #       if: steps.mix-cache.outputs.cache-hit != 'true'
+  #       run: |
+  #         mix local.rebar --force
+  #         mix local.hex --force
+  #         mix deps.get
+
+  #     - name: PLTs Cache
+  #       uses: actions/cache@v2
+  #       id: plt-cache
+  #       with:
+  #         path: ${{ format('{0}{1}', env.APP_PATH, '/priv/plts') }}
+  #         key: ${{ runner.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ env.APP_NAME }}-plts-${{ hashFiles(format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/mix.lock')) }}
+
+  #     - name: Create PLTs
+  #       if: steps.plt-cache.outputs.cache-hit != 'true'
+  #       run: |
+  #         mkdir -p priv/plts
+  #         mix dialyzer --plt
+
+  #     - name: Dialyzer
+  #       run: mix dialyzer --no-check --format short
+
+  dockerize:
+    name: Dockerize
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Image tag
+        id: vars
+        run: echo ::set-output name=image_tag::${REGISTRY}/${APP_NAME}:$(git rev-parse --short HEAD)
+
+      - name: Build
+        run: docker build --tag ${{ steps.vars.outputs.image_tag }} --target release ${{ format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/Dockerfile') }}
+
+      - name: Push
+        run: docker push ${{ steps.vars.outputs.image_tag }}
+  # release:
+  #   name: Release
+  #   runs-on: ubuntu-latest
+  #   needs: [lint, test, spec_check, dockerize]
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v2
+  #     - name: Semantic Release
+  #       uses: cycjimmy/semantic-release-action@v2
+  #       env:
+  #         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  #       with:
+  #         dry_run: false
+  #         extra_plugins: |
+  #           @semantic-release/changelog@3.0.0
+  #           @semantic-release/git@7.0.18

@@ -2,6 +2,10 @@
 
 Openvac is an application for reserving a COVID-19 vaccine.
 
+## Getting start
+
+Use `asdf` (recommended).
+
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed

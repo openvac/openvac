@@ -1,6 +1,6 @@
 # Openvac
 
-**TODO: Add description**
+Openvac is an application for reserve a COVID-19 vaccine.
 
 ## Installation
 

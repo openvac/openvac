@@ -6,7 +6,8 @@ defmodule OpenVac.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      OpenVacWeb.Endpoint
+      OpenVacWeb.Endpoint,
+      OpenVac.Repo
     ]
 
     opts = [strategy: :one_for_one, name: OpenVac.Supervisor]

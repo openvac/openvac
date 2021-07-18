@@ -20,12 +20,13 @@ defmodule OpenVac.MixProject do
 
   defp deps do
     [
+      {:cowlib, "~> 2.10", override: true},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
       {:ecto_sql, "~> 3.6"},
-      {:postgrex, "~> 0.15"},
-      {:phoenix, "~> 1.5"},
       {:jason, "~> 1.2"},
+      {:phoenix, "~> 1.5"},
       {:plug_cowboy, "~> 2.5"},
-      {:cowlib, "~> 2.10", override: true}
+      {:postgrex, "~> 0.15"}
     ]
   end
 end

@@ -26,37 +26,37 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # lint:
-  #   name: Lint
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
-  #     - name: Setup Elixir
-  #       uses: erlef/setup-beam@v1
-  #       with:
-  #         elixir-version: ${{ env.ELIXIR_VERSION }}
-  #         otp-version: ${{ env.OTP_VERSION }}
+      - name: Setup Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
 
-  #     - name: Cache deps
-  #       uses: actions/cache@v2
-  #       id: mix-cache
-  #       with:
-  #         path: ${{ format('{0}{1}', env.APP_PATH, '/deps') }}
-  #         key: ${{ runner.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ env.APP_NAME }}-mix-${{ hashFiles(format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/mix.lock')) }}
+      - name: Cache deps
+        uses: actions/cache@v2
+        id: mix-cache
+        with:
+          path: ${{ format('{0}{1}', env.APP_PATH, '/deps') }}
+          key: ${{ runner.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ env.APP_NAME }}-mix-${{ hashFiles(format('{0}/{1}{2}', github.workspace, env.APP_PATH, '/mix.lock')) }}
 
-  #     - name: Install Dependencies
-  #       if: steps.mix-cache.outputs.cache-hit != 'true'
-  #       run: |
-  #         mix local.rebar --force
-  #         mix local.hex --force
-  #         mix deps.get
+      - name: Install Dependencies
+        if: steps.mix-cache.outputs.cache-hit != 'true'
+        run: |
+          mix local.rebar --force
+          mix local.hex --force
+          mix deps.get
 
-  #     - name: Check formatted
-  #       run: mix format --check-formatted
+      - name: Check formatted
+        run: mix format --check-formatted
 
-  #     - name: Check quality
-  #       run: mix credo
+      - name: Check quality
+        run: mix credo
 
   test:
     name: Test

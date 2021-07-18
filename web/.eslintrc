@@ -5,6 +5,7 @@
     "es2021": true,
     "node": true
   },
+  "parser": "@typescript-eslint/parser",
   "extends": ["next", "plugin:prettier/recommended"],
   "rules": {
     "no-unused-vars": "warn",

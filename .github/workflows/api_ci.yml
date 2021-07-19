@@ -146,6 +146,7 @@ jobs:
   #       run: mix dialyzer --no-check --format short
 
   dockerize:
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: test
     name: Dockerize
     runs-on: ubuntu-latest

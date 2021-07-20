@@ -5,10 +5,8 @@ on:
     paths:
       - "api/**"
   push:
-    paths:
-      - "api/**"
     branches:
-      - main
+      - ci-version-from-file
 
 env:
   OTP_VERSION: "24.0.3"
@@ -26,6 +24,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  hahaha:
+    name: Read version from fileee
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test plugin
+        uses: asdf-vm/actions/plugin-test@v1
+        with:
+          command: elixir --version
+
   lint:
     name: Lint
     runs-on: ubuntu-latest

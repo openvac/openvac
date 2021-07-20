@@ -7,7 +7,8 @@ defmodule OpenVac.Application do
   def start(_type, _args) do
     children = [
       OpenVacWeb.Endpoint,
-      OpenVac.Repo
+      OpenVac.Repo,
+      {Finch, name: OpenVac.Finch}
     ]
 
     opts = [strategy: :one_for_one, name: OpenVac.Supervisor]

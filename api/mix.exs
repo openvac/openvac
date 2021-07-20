@@ -26,7 +26,9 @@ defmodule OpenVac.MixProject do
       {:jason, "~> 1.2"},
       {:phoenix, "~> 1.5"},
       {:plug_cowboy, "~> 2.5"},
-      {:postgrex, "~> 0.15"}
+      {:postgrex, "~> 0.15"},
+      {:tesla, "~> 1.4"},
+      {:finch, "~> 0.8.0"}
     ]
   end
 end

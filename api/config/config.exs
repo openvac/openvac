@@ -11,4 +11,6 @@ config :openvac, OpenVacWeb.Endpoint,
 config :openvac,
   ecto_repos: [OpenVac.Repo]
 
+config :tesla, :adapter, {Tesla.Adapter.Finch, name: OpenVac.Finch}
+
 config :openvac, OpenVac.Repo, url: "ecto://0.0.0.0:5432/openvac?sslmode=disable"

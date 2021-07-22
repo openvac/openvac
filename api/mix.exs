@@ -7,7 +7,8 @@ defmodule OpenVac.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -29,6 +30,15 @@ defmodule OpenVac.MixProject do
       {:postgrex, "~> 0.15"},
       {:tesla, "~> 1.4"},
       {:finch, "~> 0.8.0"}
+    ]
+  end
+
+  defp aliases do
+    [
+      setup: ["deps.get", "ecto.setup"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
 end
